@@ -22,19 +22,31 @@ class TriggerNode(Node):
 
         self.service = self.create_service(Trigger, service_name, self.service_callback)
 
-        self.call_trigger_service()
+        self.trigger_called = False
+        self.attempt_count = 0
+        self.max_attempts = 20
+        self.check_timer = self.create_timer(0.1, self.check_and_call_trigger)
 
-    def call_trigger_service(self):
-        if not self.client.wait_for_service(timeout_sec=2.0):
+    def check_and_call_trigger(self):
+        if self.trigger_called:
+            self.check_timer.cancel()
+            return
+
+        self.attempt_count += 1
+
+        if self.client.service_is_ready():
+            self.trigger_called = True
+            self.check_timer.cancel()
+            request = Trigger.Request()
+            future = self.client.call_async(request)
+            future.add_done_callback(self.trigger_response_callback)
+        elif self.attempt_count >= self.max_attempts:
+            self.trigger_called = True
+            self.check_timer.cancel()
             self.get_logger().warn(
                 "/spgc/trigger service not available, using default string"
             )
             self.stored_string = self.default_string
-            return
-
-        request = Trigger.Request()
-        future = self.client.call_async(request)
-        future.add_done_callback(self.trigger_response_callback)
 
     def trigger_response_callback(self, future):
         try:
