@@ -1,0 +1,9 @@
+<launch>
+    <arg name="topic_name" default="/camera/image/compressed"/>
+    <arg name="output_dir" default="/tmp/saved_images"/>
+    <arg name="namespace" default="YOUR_NAME"/>
+    <node pkg="task04" exec="image_saver" name="image_saver" namespace="$(var namespace)" output="screen">
+        <param name="topic_name" value="$(var topic_name)"/>
+        <param name="output_dir" value="$(var output_dir)"/>
+    </node>
+</launch>

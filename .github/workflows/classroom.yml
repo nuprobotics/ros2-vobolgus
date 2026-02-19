@@ -27,6 +27,7 @@ jobs:
         id: filter
         uses: dorny/paths-filter@v2
         with:
+          base: master
           filters: |
             task01:
               - 'Practice02/src/task01/**'
@@ -64,7 +65,7 @@ jobs:
           test-name: P2T1
           command: docker run --rm --name task01 --entrypoint "/test_ws/task01_test.sh" custom_student_image:latest
           timeout: 15
-          max-score: '1'
+          max-score: "1"
       - name: Update Google Sheets with Task01 results
         uses: SPGC/ClassroomToSheetsIntegration@master
         with:
@@ -104,7 +105,7 @@ jobs:
           test-name: P2T2
           command: docker run --rm --name task02 --entrypoint "/test_ws/task02_test.sh" custom_student_image:latest
           timeout: 15
-          max-score: '1'
+          max-score: "1"
       - name: Update Google Sheets with Task02 results
         uses: SPGC/ClassroomToSheetsIntegration@master
         with:
@@ -144,7 +145,7 @@ jobs:
           test-name: P2T3
           command: docker run --rm --name task03 --entrypoint "/test_ws/task03_test.sh" custom_student_image:latest
           timeout: 15
-          max-score: '1'
+          max-score: "1"
       - name: Update Google Sheets with Task03 results
         uses: SPGC/ClassroomToSheetsIntegration@master
         with:
@@ -183,7 +184,7 @@ jobs:
           test-name: P2T4
           command: docker run --rm --name task04 --entrypoint "/test_ws/task04_test.sh" custom_student_image:latest
           timeout: 15
-          max-score: '1'
+          max-score: "1"
       - name: Update Google Sheets with Task04 results
         uses: SPGC/ClassroomToSheetsIntegration@master
         with:
@@ -192,6 +193,6 @@ jobs:
           private-api-key: "${{ secrets.PRIVATE_API_KEY }}"
           task-results: "${{ steps.P2T4.outputs.result }}"
           table-id: "${{ secrets.TABLE_ID }}"
-      - name:    
+      - name:
         run: |
           echo "Task is sent"
